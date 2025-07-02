@@ -1,24 +1,39 @@
-import React from 'react';
+import React from "react";
 
 const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'analysis', label: 'Análisis Profundo', icon: '🔬' },
-    { id: 'social', label: 'Comparaciones', icon: '👥' },
-    { id: 'predictions', label: 'Predicciones', icon: '🔮' }
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "analysis", label: "Análisis", icon: "🧬" },
+    { id: "social", label: "Social", icon: "👥" },
+    { id: "predictions", label: "Predicciones", icon: "🔮" },
   ];
 
+  const handleSectionChange = (sectionId) => {
+    setActiveSection(sectionId);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
-      <div className="container">
-        <a className="navbar-brand d-flex align-items-center" href="#">
-          <strong>🧬 Tu ADN Musical</strong>
+    <nav
+      className="navbar navbar-expand-lg main-navbar"
+      style={{ position: "sticky", top: 0, zIndex: 1000 }}
+    >
+      <div className="container-fluid">
+
+        <a
+          className="navbar-brand"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            handleSectionChange("dashboard");
+          }}
+        >
+          🧬 <span className="text-success">SpotiStats</span>
         </a>
-        
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
@@ -26,61 +41,97 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        
+
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <li key={item.id} className="nav-item">
-                <button 
-                  className={`nav-link btn btn-link text-decoration-none ${
-                    activeSection === item.id ? 'active text-success' : 'text-light'
+                <a
+                  className={`nav-link ${
+                    activeSection === item.id ? "active" : ""
                   }`}
-                  onClick={() => setActiveSection(item.id)}
-                  style={{ border: 'none', background: 'none' }}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSectionChange(item.id);
+                  }}
+                  style={{ cursor: "pointer" }}
                 >
-                  <span className="me-1">{item.icon}</span>
-                  {item.label}
-                </button>
+                  {item.icon} {item.label}
+                </a>
               </li>
             ))}
           </ul>
-          
-          <div className="navbar-nav">
-            {user && (
-              <div className="nav-item dropdown">
-                <button 
-                  className="nav-link dropdown-toggle btn btn-link text-light text-decoration-none d-flex align-items-center"
-                  data-bs-toggle="dropdown"
-                  style={{ border: 'none', background: 'none' }}
-                >
-                  {user.images?.[0] && (
-                    <img 
-                      src={user.images[0].url} 
-                      alt="Profile" 
-                      className="rounded-circle me-2"
-                      style={{ width: '24px', height: '24px' }}
-                    />
-                  )}
-                  {user.display_name}
-                </button>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <span className="dropdown-item-text">
-                      <small className="text-muted">
-                        {user.followers?.total} seguidores
-                      </small>
-                    </span>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button className="dropdown-item" onClick={onLogout}>
-                      🚪 Cerrar Sesión
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+
+          {/*Perfil del usuario*/}
+          <ul className="navbar-nav">
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style={{ cursor: "pointer" }}
+              >
+                {user?.images?.[0]?.url ? (
+                  <img
+                    src={user.images[0].url}
+                    alt="Profile"
+                    className="user-avatar me-2"
+                    style={{ 
+                      width: "32px", 
+                      height: "32px",
+                      borderRadius: "50%"
+                    }}
+                  />
+                ) : (
+                  <div className="user-avatar me-2">
+                    👤
+                  </div>
+                )}
+                <span>
+                  {user?.display_name || user?.name || "Usuario Demo"}
+                </span>
+              </a>
+              <ul className="dropdown-menu dropdown-menu-end bg-dark border-secondary">
+                <li>
+                  <a
+                    className="dropdown-item text-white"
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    👤 Perfil
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item text-white"
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    ⚙️ Configuración
+                  </a>
+                </li>
+                <li>
+                  <hr className="dropdown-divider border-secondary" />
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item text-danger"
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onLogout();
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    🚪 Cerrar Sesión
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
