@@ -1,0 +1,211 @@
+:root {
+  --stats-primary: #1DB954;
+  --stats-secondary: #1ED760;
+  --stats-tertiary: #1AAE4F;
+  --stats-card-bg: #1e1e1e;
+  --stats-border: #404040;
+  --stats-text: #ffffff;
+  --stats-muted: #b3b3b3;
+  --stats-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --stats-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* cards de estadisticas*/
+.stats-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stats-card {
+  background: linear-gradient(135deg, var(--stats-card-bg) 0%, #2a2a2a 100%);
+  border: 1px solid var(--stats-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--stats-primary), var(--stats-secondary));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stats-card:hover::before {
+  opacity: 1;
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--stats-shadow-hover);
+  border-color: var(--stats-primary);
+}
+
+/* contenedor de imagen */
+.stats-image-container {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--stats-primary), var(--stats-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.stats-card:hover .stats-image {
+  transform: scale(1.05);
+}
+
+/* overlay para play count */
+.stats-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+/* botones de accion*/
+.stats-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  background: rgba(29, 185, 84, 0.1);
+  color: var(--stats-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.stats-action-btn:hover {
+  background: var(--stats-primary);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
+}
+
+/* informacion de cards */
+.stats-info h6 {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+  color: var(--stats-text);
+}
+
+.stats-info .subtitle {
+  color: var(--stats-muted);
+  font-size: 0.875rem;
+  margin-bottom: 0.125rem;
+}
+
+.stats-info .extra-info {
+  color: var(--stats-muted);
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+
+/* Badge mejorado */
+.stats-badge {
+  background: rgba(29, 185, 84, 0.15) !important;
+  color: var(--stats-primary) !important;
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stats-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.stats-card:nth-child(1) { animation-delay: 0.1s; }
+.stats-card:nth-child(2) { animation-delay: 0.2s; }
+.stats-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-cards {
+    gap: 0.75rem;
+  }
+  
+  .stats-card {
+    padding: 1rem;
+  }
+  
+  .stats-image-container {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .stats-info h6 {
+    font-size: 0.9rem;
+  }
+  
+  .stats-info .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .stats-action-btn {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* hover effects */
+.stats-card {
+  will-change: transform;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/*gradientes */
+.stats-track-gradient {
+  background: linear-gradient(135deg, #1DB954, #1ED760);
+}
+
+.stats-artist-gradient {
+  background: linear-gradient(135deg, #1ED760, #1AAE4F);
+}
+
+.stats-album-gradient {
+  background: linear-gradient(135deg, #1AAE4F, #17A047);
+}
