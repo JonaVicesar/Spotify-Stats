@@ -1,0 +1,572 @@
+.card {
+  background: var(--gradient-card);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-medium);
+  overflow: hidden;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-medium);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--spotify-green);
+}
+
+/* Header */
+.card-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--spotify-lighter-gray);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--spotify-white);
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: var(--spotify-text-gray);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-text {
+  color: var(--spotify-text-gray);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.card-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer de la tarjeta */
+.card-footer {
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--spotify-lighter-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Tarjetas de estadisticas */
+.stats-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  text-align: center;
+  transition: all var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transition: transform var(--transition-medium);
+}
+
+.stats-card:hover::after {
+  transform: scaleX(1);
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--spotify-green);
+}
+
+.stats-card-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  color: var(--spotify-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(29, 185, 84, 0.1);
+  border-radius: 50%;
+}
+
+.stats-card-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--spotify-green);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stats-card-label {
+  font-size: 0.9rem;
+  color: var(--spotify-text-gray);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-card-description {
+  font-size: 0.8rem;
+  color: var(--spotify-text-gray);
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Tarjetas de artistas */
+.artist-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.artist-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(29, 185, 84, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+}
+
+.artist-card:hover::before {
+  opacity: 1;
+}
+
+.artist-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--spotify-green);
+}
+
+.artist-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.artist-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--spotify-white);
+  font-size: 1.25rem;
+  border: 2px solid var(--spotify-green);
+}
+
+.artist-info h4 {
+  color: var(--spotify-white);
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.artist-info p {
+  color: var(--spotify-text-gray);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.artist-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.artist-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.artist-stat-number {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--spotify-green);
+  display: block;
+}
+
+.artist-stat-label {
+  font-size: 0.8rem;
+  color: var(--spotify-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tarjetas de canciones */
+.track-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.track-card:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--spotify-green);
+  background: linear-gradient(135deg, var(--spotify-medium-gray) 0%, var(--spotify-light-gray) 100%);
+}
+
+.track-card:last-child {
+  margin-bottom: 0;
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.track-number {
+  width: 24px;
+  height: 24px;
+  background: var(--spotify-green);
+  color: var(--spotify-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.track-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  color: var(--spotify-white);
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  color: var(--spotify-text-gray);
+  margin: 0;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-duration {
+  color: var(--spotify-text-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* Tarjetas de albumes */
+.album-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--spotify-green);
+}
+
+.album-cover {
+  width: 100%;
+  height: 200px;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--spotify-white);
+  font-size: 3rem;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+}
+
+.album-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
+}
+
+.album-details {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-name {
+  color: var(--spotify-white);
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.album-artist {
+  color: var(--spotify-text-gray);
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.album-stats {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--spotify-lighter-gray);
+}
+
+.album-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.album-stat-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--spotify-green);
+  display: block;
+}
+
+.album-stat-label {
+  font-size: 0.75rem;
+  color: var(--spotify-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tarjeta de loading */
+.card-loading {
+  background: var(--spotify-medium-gray);
+  border: 1px solid var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem;
+  text-align: center;
+  color: var(--spotify-text-gray);
+}
+
+.card-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--spotify-lighter-gray);
+  border-top: 4px solid var(--spotify-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Tarjeta vacia */
+.card-empty {
+  background: var(--spotify-medium-gray);
+  border: 2px dashed var(--spotify-lighter-gray);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--spotify-text-gray);
+}
+
+.card-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.card-empty-title {
+  font-size: 1.2rem;
+  color: var(--spotify-white);
+  margin-bottom: 0.5rem;
+}
+
+.card-empty-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Grid de tarjetas */
+.cards-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.cards-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.cards-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.cards-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Lista de tarjetas */
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding: 1rem;
+  }
+  
+  .stats-card {
+    padding: 1.5rem;
+  }
+  
+  .stats-card-number {
+    font-size: 2rem;
+  }
+  
+  .artist-card {
+    padding: 1rem;
+  }
+  
+  .artist-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+  
+  .album-cover {
+    height: 150px;
+    font-size: 2rem;
+  }
+  
+  .album-details {
+    padding: 1rem;
+  }
+  
+  .cards-grid-2,
+  .cards-grid-3,
+  .cards-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .track-card {
+    padding: 0.75rem;
+  }
+  
+  .track-info {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header,
+  .card-body,
+  .card-footer {
+    padding: 0.75rem;
+  }
+  
+  .stats-card {
+    padding: 1rem;
+  }
+  
+  .stats-card-number {
+    font-size: 1.8rem;
+  }
+  
+  .artist-card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .artist-stats {
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .album-cover {
+    height: 120px;
+    font-size: 1.5rem;
+  }
+  
+  .track-info {
+    gap: 0.5rem;
+  }
+  
+  .track-number {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+}
