@@ -1,6 +1,8 @@
-import React from "react";
+import React, { use } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊" },
     { id: "analysis", label: "Análisis", icon: "🧬" },
@@ -11,6 +13,9 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
   const handleSectionChange = (sectionId) => {
     setActiveSection(sectionId);
   };
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);}
 
   return (
     <nav
@@ -24,6 +29,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
           href="#"
           onClick={(e) => {
             e.preventDefault();
+            setActiveSection("dashboard");
             handleSectionChange("dashboard");
           }}
         >
@@ -53,6 +59,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
+                    setActiveSection(item.id);
                     handleSectionChange(item.id);
                   }}
                   style={{ cursor: "pointer" }}
@@ -73,6 +80,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 style={{ cursor: "pointer" }}
+                onClick={toggleMenu}
               >
                 {user?.images?.[0]?.url ? (
                   <img
@@ -93,13 +101,18 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                 <span>
                   {user?.display_name || user?.name || "Usuario Demo"}
                 </span>
+
               </a>
-              <ul className="dropdown-menu dropdown-menu-end bg-dark border-secondary">
+
+              <ul 
+              className={`dropdown-menu dropdown-menu-end bg-dark border-secondary ${menuOpen ? "show" : ""}`}
+              style={{ display: menuOpen ? "block" : "none" }}
+            >
                 <li>
                   <a
                     className="dropdown-item text-white"
                     href="#"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => {e.preventDefault(); }}
                   >
                     👤 Perfil
                   </a>
@@ -107,8 +120,9 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                 <li>
                   <a
                     className="dropdown-item text-white"
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
+                    href=""
+                    onClick={(e) =>{ e.preventDefault(); }}
+                    style={{ cursor: "pointer" }}
                   >
                     ⚙️ Configuración
                   </a>
