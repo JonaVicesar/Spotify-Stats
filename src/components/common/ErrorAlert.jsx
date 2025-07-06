@@ -1,4 +1,3 @@
-// src/components/common/ErrorAlert.jsx
 import React from 'react';
 
 const ErrorAlert = ({ message, onRetry }) => {
