@@ -11,6 +11,8 @@ const Layout = ({
   statsError,
   onLogout,
   refreshStats,
+  selectedTimeRange,
+  onTimeRangeChange,
 }) => {
   const [activeSection, setActiveSection] = useState("dashboard");
 
@@ -22,6 +24,8 @@ const Layout = ({
       statsLoading,
       statsError,
       refreshStats,
+      selectedTimeRange,
+      onTimeRangeChange,
     };
 
     switch (activeSection) {
