@@ -1,11 +1,7 @@
-// src/components/layouts/Layout.jsx
 import React, { useState } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import DashboardSection from "../dashboard/DashboardSection";
-import AnalysisSection from "../analysis/AnalysisSection";
-import SocialSection from "../social/SocialSection";
-import PredictionsSection from "../predictions/PredictionsSection";
 import LoadingSpinner from "../common/LoadingSpinner";
 
 const Layout = ({
