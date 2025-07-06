@@ -8,10 +8,8 @@
 @import "./styles/components/auth.css";
 @import "./styles/components/navigation.css";
 @import "./styles/components/dashboard.css";
-@import "./styles/components/stats.css";
 @import "./styles/components/cards.css";
 @import "./styles/components/footer.css";
-
 
 /* configuraciion de la aplicación */
 .app {
