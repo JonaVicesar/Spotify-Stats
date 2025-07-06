@@ -1,61 +1,70 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
 import Layout from "./components/layouts/Layout";
 import SpotifyLogin from "./components/auth/SpotifyLogin";
+import { useSpotifyAuth } from "./hooks/useSpotifyAuth";
 import { useStats } from "./hooks/useStats";
 import "./App.css";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [selectedTimeRange, setSelectedTimeRange] = useState("medium_term");
+
+  // Usar el hook real de Spotify
+  const { 
+    isAuthenticated, 
+    loading, 
+    error, 
+    login, 
+    logout, 
+    makeAuthenticatedRequest 
+  } = useSpotifyAuth();
+
+  const handleTimeRangeChange = (newRange) => {
+    console.log("cambiando rango de tiempo", newRange);
+    setSelectedTimeRange(newRange);
+    // Actualizar las estadísticas con el nuevo rango de tiempo
+    refresh(newRange);
+  };
 
   // usar el hook useStats para obtener estadisticas
-  // si el usuario no está autenticado pasamos null para evitar la llamada a la api
   const {
     stats,
     loading: statsLoading,
     error: statsError,
     refresh,
-  } = useStats(isAuthenticated ? "medium_term" : null);
+  } = useStats(isAuthenticated ? selectedTimeRange : null);
 
-  const handleLogin = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  // Obtener datos del usuario cuando se autentica
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (isAuthenticated && !user) {
+        try {
+          const response = await makeAuthenticatedRequest('https://api.spotify.com/v1/me');
+          const userData = await response.json();
+          setUser(userData);
+          console.log('Usuario autenticado:', userData);
+        } catch (error) {
+          console.error('Error obteniendo datos del usuario:', error);
+        }
+      }
+    };
 
-      // simulacion de autenticacion
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    fetchUserData();
+  }, [isAuthenticated, makeAuthenticatedRequest, user]);
 
-      // simular datos de usuario 
-      const mockUser = {
-        id: "user123",
-        display_name: "Usuario Demo",
-        
-      };
-
-      setUser(mockUser);
-      setIsAuthenticated(true);
-    } catch (err) {
-      setError("Error en autenticación");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Limpiar datos del usuario al cerrar sesion
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    logout();
     setUser(null);
   };
 
   if (!isAuthenticated) {
-  return (
-    <div className="auth-fullscreen">
-      <SpotifyLogin onConnect={handleLogin} loading={loading} error={error} />
-    </div>
-  );
-}
+    return (
+      <div className="auth-fullscreen">
+        <SpotifyLogin onConnect={login} loading={loading} error={error} />
+      </div>
+    );
+  }
 
   return (
     <Layout
@@ -65,6 +74,8 @@ const App = () => {
       statsError={statsError}
       onLogout={handleLogout}
       refreshStats={refresh} 
+      selectedTimeRange={selectedTimeRange}
+      onTimeRangeChange={handleTimeRangeChange}
     />
   );
 };
