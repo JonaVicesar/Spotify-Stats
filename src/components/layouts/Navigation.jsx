@@ -2,12 +2,12 @@ import React, { use } from "react";
 import { useState, useRef, useEffect } from "react";
 
 const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); //state para abrir el menu desplegable
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: "📊" },
-    { id: "analysis", label: "Análisis", icon: "🧬" },
+   /* { id: "analysis", label: "Análisis", icon: "🧬" },
     { id: "social", label: "Social", icon: "👥" },
-    { id: "predictions", label: "Predicciones", icon: "🔮" },
+    { id: "predictions", label: "Predicciones", icon: "🔮" },*/
   ];
 
   const handleSectionChange = (sectionId) => {
