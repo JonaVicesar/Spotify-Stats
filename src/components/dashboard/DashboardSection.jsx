@@ -14,9 +14,10 @@
     stats, 
     statsLoading, 
     statsError,
-    refreshStats 
-  }) => {
-    const [selectedTimeRange, setSelectedTimeRange] = useState('medium_term');
+    refreshStats,
+    selectedTimeRange,
+    onTimeRangeChange 
+  }) => { 
     const [activeTab, setActiveTab] = useState('overview');
 
     const timeRangeOptions = [
@@ -30,8 +31,8 @@
     };
 
     const handleTimeRangeChange = (newRange) => {
-      setSelectedTimeRange(newRange);
-      refreshStats(newRange);
+      console.log('cambiando rango de tiempo', newRange);
+      onTimeRangeChange(newRange);
     };
 
     if (statsLoading) {
@@ -92,7 +93,7 @@
                       {timeRangeOptions.map(option => (
                         <option key={option.value} value={option.value}>
                           {option.label}
-                        </option>
+                        </option> 
                       ))}
                     </select>
                   </div>
@@ -118,7 +119,7 @@
                   <button
                     key={tab}
                     className={`btn ${activeTab === tab ? 'btn-success' : 'btn-outline-light'} px-4 py-3 fw-semibold`}
-                    onClick={() => handleTabChange(tab)}
+                    onClick={() => {handleTabChange(tab)}}
                     style={{ minWidth: '160px' }}
                   >
                     {labels[tab]}
