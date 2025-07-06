@@ -8,13 +8,6 @@ const Footer = () => {
        <div className="container">
         <div className="row">
           <div className="col-md-8 mx-auto">
-            <p className="mb-2">
-              <strong>🧬 Tu ADN Musical</strong> - Powered by Spotify API
-            </p>
-            <small className="text-muted d-block mb-3">
-              Descubre tu identidad musical única
-            </small>
-
             <div className="d-flex justify-content-center gap-3 mb-3">
               <small className="text-muted">🎵 Análisis en tiempo real</small>
               <small className="text-muted">
@@ -28,7 +21,7 @@ const Footer = () => {
             <div className="row text-center">
               <div className="col-md-6">
                 <small className="text-muted">
-                  © {currentYear} Tu ADN Musical. Hecho con ❤️ y mucho mate🧉
+                     Hecho con ❤️ y mucho mate🧉
                   por
                   <a
                     href="https://jonavicesar.pages.dev/"
