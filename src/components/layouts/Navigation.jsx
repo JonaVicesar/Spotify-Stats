@@ -1,5 +1,7 @@
 import React, { use } from "react";
 import { useState, useRef, useEffect } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faGithub } from '@fortawesome/free-brands-svg-icons'
 
 const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false); //state para abrir el menu desplegable
@@ -70,6 +72,16 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
             ))}
           </ul>
 
+          {/* link al repositorio */}
+          <span className="navbar-text me-3">
+            <a className="github-link" href="https://github.com/JonaVicesar">
+              <FontAwesomeIcon 
+              icon={faGithub}
+              className="fs-1 text-white" 
+               />
+               </a>
+          </span>
+
           {/*Perfil del usuario*/}
           <ul className="navbar-nav">
             <li className="nav-item dropdown">
@@ -101,9 +113,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                 <span>
                   {user?.display_name || user?.name || "Usuario Demo"}
                 </span>
-
               </a>
-
               <ul 
               className={`dropdown-menu dropdown-menu-end bg-dark border-secondary ${menuOpen ? "show" : ""}`}
               style={{ display: menuOpen ? "block" : "none" }}
@@ -115,7 +125,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
                     onClick={(e) => {e.preventDefault(); }}
                   >
                     👤 Perfil
-                  </a>
+                  </a> 
                 </li>
                 <li>
                   <a
