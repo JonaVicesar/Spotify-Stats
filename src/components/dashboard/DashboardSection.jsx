@@ -135,11 +135,13 @@
           <>
             {/* Estadisticas detalladas con layout */}
             <div className="row g-4 mb-5">
+              <div className="d-flex justify-content-center align-items-center"> {/*centrar cards */}
               <div className="col-xl-8 col-lg-7">
                 <div className="h-100">
                   <MostPlayedStats 
                     mostPlayed={mostPlayed} 
                   />
+                </div>
                 </div>
               </div>
               
