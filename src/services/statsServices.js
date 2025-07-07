@@ -329,18 +329,72 @@ const getMostPlayedArtist = async () => {
 /**
  * Obtiene el album mas reproducido
  */
-const getMostPlayedAlbum = async () => {
+const getMostPlayedAlbum = async (timeRange = 'medium_term') => {
   try {
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedAlbum;
     }
 
-    // TODO: todavia no conecto a la api de spotify
-    
-    return MOCK_DATA.mostPlayedAlbum;
+
+    // obtener canciones 
+    const response = await spotifyApiRequest(`/me/top/tracks?limit=50&time_range=${timeRange}`);
+   
+    if (!response.items || response.items.length === 0) {
+      console.log('No tracks found, using mock data');
+      return MOCK_DATA.mostPlayedAlbum;
+    }
+   
+    // contar cuantas veces se repite cada album
+    const albumCounts = {};
+    response.items.forEach((track, index) => {
+      const album = track.album;
+      const albumId = album.id;
+     
+      if (!albumCounts[albumId]) {
+        albumCounts[albumId] = {
+          id: albumId,
+          name: album.name,
+          artist: album.artists[0]?.name || 'Unknown Artist',
+          imageUrl: album.images && album.images.length > 0 ? album.images[0].url : null,
+          releaseDate: album.release_date,
+          totalTracks: album.total_tracks,
+          count: 0,
+          tracks: []
+        };
+      }
+     
+      // dar una puntuacion a cada canción basada en su posición en el top
+      const weight = 50 - index; // las primeras tinen mas puntacion
+      albumCounts[albumId].count += weight;
+      albumCounts[albumId].tracks.push(track);
+    });
+   
+    // encontrar el album con mayor puntuacion
+    const mostPlayedAlbum = Object.values(albumCounts)
+      .sort((a, b) => b.count - a.count)[0];
+   
+    if (!mostPlayedAlbum) {
+      return MOCK_DATA.mostPlayedAlbum;
+    }
+   
+    // calcular el total de minutos escuchados
+    const totalMinutes = Math.round(
+      mostPlayedAlbum.tracks.reduce((sum, track) => sum + track.duration_ms, 0) / (1000 * 60)
+    );
+   
+    return {
+      id: mostPlayedAlbum.id,
+      name: mostPlayedAlbum.name,
+      artist: mostPlayedAlbum.artist,
+      totalMinutes: totalMinutes,
+      totalPlays: mostPlayedAlbum.tracks.length, // numero de canciones del album en el top
+      releaseDate: mostPlayedAlbum.releaseDate,
+      imageUrl: mostPlayedAlbum.imageUrl,
+      totalTracks: mostPlayedAlbum.totalTracks
+    };
   } catch (error) {
     console.error('Error getting most played album:', error);
     return MOCK_DATA.mostPlayedAlbum;
@@ -368,26 +422,53 @@ const getMostPlayedPlaylist = async () => {
   }
 };
 
+
 /**
  * Obtiene la cancion mas reproducida
  */
 const getMostPlayedTrack = async () => {
   try {
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedTrack;
     }
 
-    // TODO: todavia no conecto a la api de spotify
-    
-    return MOCK_DATA.mostPlayedTrack;
+
+    // llamada a la API
+    const response = await spotifyApiRequest('/me/top/tracks?limit=1&time_range=medium_term');
+   
+    if (!response.items || response.items.length === 0) {
+      console.log('No tracks found, using mock data');
+      return MOCK_DATA.mostPlayedTrack;
+    }
+   
+    const track = response.items[0];
+   
+    return {
+      id: track.id,
+      name: track.name,
+      artist: track.artists[0]?.name || 'Unknown Artist',
+      album: track.album?.name || 'Unknown Album',
+      imageUrl: track.album?.images?.[0].url || "unknown",
+      totalMinutes: track.duration_ms, 
+      totalPlays: 0,   // no esta disponible en la api
+      duration: track.duration_ms,
+      popularity: track.popularity,
+      audioFeatures: {
+        energy: 0,
+        valence: 0,
+        danceability: 0
+        
+      } //objeto vacio por ahora
+    };
   } catch (error) {
     console.error('Error getting most played track:', error);
     return MOCK_DATA.mostPlayedTrack;
   }
 };
+
 
 /**
  * Obtiene el top de canciones del usuario
