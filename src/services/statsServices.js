@@ -703,7 +703,7 @@ const getStatsByPeriod = async (period = 'month') => {
 };
 
 /**
- * Obtiene todos los datos del usuario en un objeto
+ * obtiene todos los datos del usuario en un objeto
  */
 const getAllUserStats = async (options = {}) => {
   const {
@@ -713,10 +713,9 @@ const getAllUserStats = async (options = {}) => {
     period = 'month'
   } = options;
 
+
   try {
-    console.log('Loading user stats with options:', options);
-    
-    
+    // Ejecutar todas las consultas en paralelo para mejor rendimiento
     const [
       mostPlayedTrack,
       mostPlayedArtist,
@@ -738,6 +737,10 @@ const getAllUserStats = async (options = {}) => {
       getListeningStats(),
       includePeriodStats ? getStatsByPeriod(period) : Promise.resolve(null)
     ]);
+
+
+    console.log("PLAYLISTTTTT",mostPlayedPlaylist);
+
 
     const consolidatedStats = {
       mostPlayed: {
@@ -761,13 +764,33 @@ const getAllUserStats = async (options = {}) => {
       }
     };
 
-    console.log('User stats loaded successfully');
+
+    console.log('se cargaron las estadisticas');
     return consolidatedStats;
   } catch (error) {
-    console.error('Error getting all user stats:', error);
+    console.error('no se cargaron', error);
     throw new SpotifyStatsError('Failed to get user stats', 'ALL_STATS_ERROR', error);
   }
 };
+
+
+const testApiConnection = async () => {
+  try {
+    if (!hasValidToken()) {
+      console.log('No valid token for API test');
+      return { success: false, error: 'No valid token' };
+    }
+   
+    // Test simple: obtener perfil del usuario
+    const response = await spotifyApiRequest('/me');
+    console.log('API Test successful:', response);
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('API Test failed:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 
 export {
   // Funciones principales
