@@ -119,6 +119,7 @@ topAlbums: [
 };
 
 
+
 /**
  * clase para manejar errores 
  */
@@ -155,7 +156,7 @@ const formatMinutesToReadable = (minutes) => {
 };
 
 /**
- * valida el tiempo
+ * valida el rango tiempo
  */
 const validateTimeRange = (timeRange) => {
   const validRanges = Object.values(SPOTIFY_CONFIG.TIME_RANGES);
@@ -177,30 +178,73 @@ const simulateNetworkDelay = (ms = 300) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-// FUNCIONES ED AUTENTICACION
+// FUNCIONES DE AUTENTICACION
 /**
- * Bbtiene el token de acceso de SpotifY
+ * obtiene el token de acceso de SpotifY
  */
 const getAccessToken = () => {
   try {
-    return localStorage.getItem('spotify_access_token') || null;
+    const token = localStorage.getItem('spotify_access_token');
+    console.log('token recuperado:', token ? 'Token exists' : 'No token found');
+    return token;
   } catch (error) {
-    console.error('Error getting access token:', error);
+    console.error('error accediendo al token:', error);
     return null;
   }
 };
+
 
 /**
  * Verifica si hay un token valido
  */
 const hasValidToken = () => {
   const token = getAccessToken();
+ 
+  if (!token) {
+    console.log('no hay token disponible');
+    return false;
+  }
+ 
   const tokenExpiry = localStorage.getItem('spotify_token_expiry');
-  
-  if (!token || !tokenExpiry) return false;
-  
-  return Date.now() < parseInt(tokenExpiry, 10);
+  console.log('expiracion del token', tokenExpiry);
+ 
+  if (!tokenExpiry) {
+    console.log('No token expiry found, checking if token works anyway');
+    // si no hay fecha de expiracion, intentemos usar el token de todas formas
+    return true;
+  }
+ 
+  const currentTime = Date.now();
+  const expiryTime = parseInt(tokenExpiry, 10);
+  const isValid = currentTime < expiryTime;
+ 
+  console.log('Token validation:', {
+    currentTime: new Date(currentTime).toISOString(),
+    expiryTime: new Date(expiryTime).toISOString(),
+    isValid
+  });
+ 
+  return isValid;
 };
+
+/*nueva funcion para guardar el token con su fecha de expiracion */
+const saveAccessToken = (token, expiresIn = 3600) => {
+  try {
+    localStorage.setItem('spotify_access_token', token);
+    // Calcular fecha de expiración (expiresIn está en segundos)
+    const expiryTime = Date.now() + (expiresIn * 1000);
+    localStorage.setItem('spotify_token_expiry', expiryTime.toString());
+   
+    console.log('Token saved successfully:', {
+      tokenExists: !!token,
+      expiresAt: new Date(expiryTime).toISOString(),
+      expiresInMinutes: Math.round(expiresIn / 60)
+    });
+  } catch (error) {
+    console.error('Error saving access token:', error);
+  }
+};
+
 
 /**
  * Hace una peticion a la API de Spotify
