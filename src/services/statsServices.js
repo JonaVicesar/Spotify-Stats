@@ -519,22 +519,36 @@ const getTopArtists = async (timeRange = 'medium_term', limit = 50) => {
   try {
     const validTimeRange = validateTimeRange(timeRange);
     const validLimit = validateLimit(limit);
-    
+   
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
-      console.log('Using mock data - no valid token');
+      console.log('usando datos mock #######');
       return MOCK_DATA.topArtists.slice(0, validLimit);
     }
 
-    // TODO: todavia no conecto a la api de spotify
-    
-    return MOCK_DATA.topArtists.slice(0, validLimit);
+    const response = await spotifyApiRequest(`/me/top/artists?limit=${validLimit}&time_range=${validTimeRange}`);
+   
+    if (!response.items || response.items.length === 0) {
+      console.log('no se encontraron artistas, usando datos mock');
+      return MOCK_DATA.topArtists.slice(0, validLimit);
+    }
+   
+    return response.items.map((artist, index) => ({
+      id: artist.id,
+      name: artist.name,
+      genres: artist.genres,
+      images: artist.images,
+      followers: artist.followers,
+      popularity: artist.popularity,
+      rank: index + 1
+    }));
   } catch (error) {
     console.error('Error getting top artists:', error);
     return MOCK_DATA.topArtists.slice(0, validateLimit(limit));
   }
 };
+
 
 /**
  * Obtiene el top de albumes del usuario
