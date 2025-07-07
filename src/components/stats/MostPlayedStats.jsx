@@ -12,6 +12,8 @@ const MostPlayedStats = ({ mostPlayed }) => {
     );
   }
 
+  console.log('cancion', mostPlayed.track);
+
   const statsData = [
     {
       title: 'Canción Más Reproducida',
@@ -38,7 +40,7 @@ const MostPlayedStats = ({ mostPlayed }) => {
       title: 'Playlist Favorita',
       icon: 'fas fa-list',
       color: 'info',
-      data: mostPlayed.playlist,
+      data: mostPlayed.playlist ,
       type: 'playlist'
     }
   ];
@@ -118,23 +120,25 @@ const MostPlayedStats = ({ mostPlayed }) => {
     return actions;
   };
 
+
+
   return (
-<div className="row g-4">
+<div className="row g-4 mb-5">
         {statsData.map((stat, index) => (
           <div key={index} className="col-lg-6 mb-4">
             <div className="card bg-dark border-secondary h-100">
-              <div className={`card-header bg-${stat.color} d-flex align-items-center py-3`}>
+              <div className={`card-header  bg-${stat.color} d-flex align-items-center py-3`}>
                 <i className={`${stat.icon} me-2 fs-5`}></i>
                 <h6 className="mb-0 text-white fw-semibold">{stat.title}</h6>
               </div>
-              <div className="card-body p-4">
+              <div className="card-body p-2">
                 {stat.data ? (
                   <div className="d-flex align-items-start gap-3">
                     {/* Imagen */}
                     <div className="flex-shrink-0">
                       <img 
-                        src={stat.data.images?.[0]?.url || stat.data.album?.images?.[0]?.url || '/placeholder-music.png'} 
-                        alt={stat.data.name}
+                        src={stat.data?.imageUrl  || 'n'} 
+                        alt={stat.data?.name}
                         className="rounded"
                         style={{ width: '80px', height: '80px', objectFit: 'cover' }}
                       />
@@ -147,20 +151,23 @@ const MostPlayedStats = ({ mostPlayed }) => {
                       </h6>
                       
                       {/* Subtitulo especifico por tipo */}
-                      <p className="text-white-50 mb-3 small text-truncate">
-                        {stat.type === 'track' ? stat.data.artists?.map(a => a.name).join(', ') : 
-                         stat.type === 'album' ? stat.data.artists?.map(a => a.name).join(', ') :
-                         stat.type === 'playlist' ? `Por ${stat.data.owner?.display_name}` : 
-                         stat.type === 'artist' ? `${stat.data.followers?.total?.toLocaleString()} seguidores` : ''}
-                      </p>
-
+                        <p className="text-white-50 mb-3 small text-truncate">
+                          {stat.type === 'track' ? stat.data.artists?.map(a => a.name).join(', ') :                       
+                          stat.type === 'album' ? stat.data.artists?.map(a => a.name).join(', ') :
+                          stat.type === 'playlist' ? `Por ${stat.data.owner?.display_name}` : 
+                          stat.type === 'artist' ? `${stat.data.followers?.total?.toLocaleString()} seguidores` : ''}  
+                        </p>
+                              {/*{console.log("##########", stat.data?.artist)}*/}
+                              
                       {/* Estadistica principal*/}
                       <div className="mb-3">
                         {stat.type === 'track' && (
                           <div className="d-flex align-items-center gap-2">
                             <i className="fas fa-play-circle text-primary"></i>
                             <span className="text-white fw-semibold">
-                              {stat.data.play_count?.toLocaleString() || '0'} reproducciones
+                              {stat.data?.totalMinutes} reproducciones  { /*por ahora solo muestro como reproducciones los ms*/}
+                              {console.log('TOTAL MS', stat.data.totalMinutes)}
+
                             </span>
                           </div>
                         )}
@@ -168,7 +175,9 @@ const MostPlayedStats = ({ mostPlayed }) => {
                           <div className="d-flex align-items-center gap-2">
                             <i className="fas fa-clock text-success"></i>
                             <span className="text-white fw-semibold">
-                              {stat.data.total_play_time || '0'}h escuchadas
+                              {stat.data.total_play_time || '0'}h escuchadas 
+                              {console.log('ARTISTAAAAAAA', stat.data)}
+
                             </span>
                           </div>
                         )}
@@ -176,7 +185,9 @@ const MostPlayedStats = ({ mostPlayed }) => {
                           <div className="d-flex align-items-center gap-2">
                             <i className="fas fa-calendar text-warning"></i>
                             <span className="text-white fw-semibold">
-                              {stat.data.release_date ? new Date(stat.data.release_date).getFullYear() : 'N/A'}
+                              {stat.data?.releaseDate || 'N/A'}
+                              {console.log('AÑO DE LANZAMIENTO', stat.data)}
+
                             </span>
                           </div>
                         )}
@@ -184,7 +195,7 @@ const MostPlayedStats = ({ mostPlayed }) => {
                           <div className="d-flex align-items-center gap-2">
                             <i className="fas fa-list text-info"></i>
                             <span className="text-white fw-semibold">
-                              {stat.data.tracks?.total || 0} canciones
+                              {stat.data?.totalTracks || 0} canciones {console.log('PLAYLISTTTTTTTTTTTTTTTT ', stat.data.totalTracks)}
                             </span>
                           </div>
                         )}
