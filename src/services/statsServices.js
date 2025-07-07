@@ -557,17 +557,66 @@ const getTopAlbums = async (timeRange = 'medium_term', limit = 50) => {
   try {
     const validTimeRange = validateTimeRange(timeRange);
     const validLimit = validateLimit(limit);
-    
+   
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.topAlbums.slice(0, validLimit);
     }
 
-    // TODO: todavia no conecto a la api de spotify
-    
-    return MOCK_DATA.topAlbums.slice(0, validLimit);
+
+    // obtener canciones para contar reproducciones de albumes
+    // spotify no tiene un endpoint directo para top albums por lo que usamos top tracks
+    const response = await spotifyApiRequest(`/me/top/tracks?limit=50&time_range=${validTimeRange}`);
+   
+    if (!response.items || response.items.length === 0) {
+      return MOCK_DATA.topAlbums.slice(0, validLimit);
+    }
+   
+    // contar cuantas veces se repite cada album y dar una puntuacion basada en la posicion de la cancion en el top
+    const albumCounts = {};
+    response.items.forEach((track, index) => {
+      const album = track.album;
+      const albumId = album.id;
+     
+      if (!albumCounts[albumId]) {
+        albumCounts[albumId] = {
+          id: albumId,
+          name: album.name,
+          artists: album.artists,
+          images: album.images,
+          release_date: album.release_date,
+          total_tracks: album.total_tracks,
+          album_type: album.album_type,
+          score: 0,
+          trackCount: 0
+        };
+      }
+     
+      //dar puntuacion a cada cancion basada en su posicion en el top
+      const weight = 50 - index;
+      albumCounts[albumId].score += weight;
+      albumCounts[albumId].trackCount++;
+    });
+   
+    // convertir el objeto a un array y ordenar por puntuacion
+    const topAlbums = Object.values(albumCounts)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, validLimit)
+      .map((album, index) => ({
+        id: album.id,
+        name: album.name,
+        artists: album.artists,
+        images: album.images,
+        release_date: album.release_date,
+        total_tracks: album.total_tracks,
+        album_type: album.album_type,
+        rank: index + 1,
+        tracksInTop: album.trackCount 
+      }));
+   
+    return topAlbums;
   } catch (error) {
     console.error('Error getting top albums:', error);
     return MOCK_DATA.topAlbums.slice(0, validateLimit(limit));
