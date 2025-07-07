@@ -294,15 +294,32 @@ const spotifyApiRequest = async (endpoint, options = {}) => {
 const getMostPlayedArtist = async () => {
   try {
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedArtist;
     }
 
-    // TODO: todavia no conecto a la api de spotifi
-    
-    return MOCK_DATA.mostPlayedArtist;
+
+    // Llamada real a la API
+    const response = await spotifyApiRequest('/me/top/artists?limit=1&time_range=medium_term');
+   
+    if (!response.items || response.items.length === 0) {
+      console.log('No artists found, using mock data');
+      return MOCK_DATA.mostPlayedArtist;
+    }
+   
+    const artist = response.items[0];
+   
+    return {
+      id: artist.id,
+      name: artist.name,
+      totalMinutes: 0, // no esta disponible en la API
+      totalPlays: 0,   // tampoco esta disponible
+      genres: artist.genres || [],
+      imageUrl: artist.images && artist.images.length > 0 ? artist.images[0].url : null,
+      popularity: artist.popularity
+    };
   } catch (error) {
     console.error('Error getting most played artist:', error);
     return MOCK_DATA.mostPlayedArtist;
