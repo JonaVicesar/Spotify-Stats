@@ -289,7 +289,7 @@ const spotifyApiRequest = async (endpoint, options = {}) => {
 /**
  * Obtiene el artista mas reproducido
  */
-const getMostPlayedArtist = async () => {
+const getMostPlayedArtist = async (timeRange = 'medium_term') => {
   try {
     await simulateNetworkDelay();
    
@@ -300,7 +300,7 @@ const getMostPlayedArtist = async () => {
 
 
     // Llamada real a la API
-    const response = await spotifyApiRequest('/me/top/artists?limit=1&time_range=medium_term');
+    const response = await spotifyApiRequest(`/me/top/artists?limit=1&time_range=${timeRange}`);
    
     if (!response.items || response.items.length === 0) {
       console.log('No artists found, using mock data');
@@ -403,7 +403,7 @@ const getMostPlayedAlbum = async (timeRange = 'medium_term') => {
  * obtiene la playlist mas reproducida
  * spotify no tiene endpoint para obtener la playlist mas reproducida
  */
-const getMostPlayedPlaylist = async () => {
+const getMostPlayedPlaylist = async (timeRange = 'medium_term') => {
   try {
     await simulateNetworkDelay();
    
@@ -421,7 +421,7 @@ const getMostPlayedPlaylist = async () => {
     }
 
     // obtener top tracks para comparar
-    const topTracksResponse = await spotifyApiRequest('/me/top/tracks?limit=50&time_range=medium_term');
+    const topTracksResponse = await spotifyApiRequest(`/me/top/tracks?limit=50&time_range=${timeRange}`);
    
     if (!topTracksResponse.items) {
       return MOCK_DATA.mostPlayedPlaylist;
@@ -485,7 +485,7 @@ const getCurrentUserId = async () => {
 /**
  * obtiene la cancion mas reproducida
  */
-const getMostPlayedTrack = async () => {
+const getMostPlayedTrack = async (timeRange = 'medium_term') => {
   try {
     await simulateNetworkDelay();
    
@@ -496,7 +496,7 @@ const getMostPlayedTrack = async () => {
 
 
     // llamada a la API
-    const response = await spotifyApiRequest('/me/top/tracks?limit=1&time_range=medium_term');
+    const response = await spotifyApiRequest(`/me/top/tracks?limit=1&time_range=${timeRange}`);
    
     if (!response.items || response.items.length === 0) {
       console.log('No tracks found, using mock data');
@@ -784,10 +784,10 @@ const getAllUserStats = async (options = {}) => {
       generalStats,
       periodStats
     ] = await Promise.all([
-      getMostPlayedTrack(),
-      getMostPlayedArtist(),
-      getMostPlayedAlbum(),
-      getMostPlayedPlaylist(),
+      getMostPlayedTrack(timeRange),
+      getMostPlayedArtist(timeRange),
+      getMostPlayedAlbum(timeRange),
+      getMostPlayedPlaylist(timeRange),
       getTopTracks(timeRange, limit),
       getTopArtists(timeRange, limit),
       getTopAlbums(timeRange, limit),
