@@ -69,7 +69,7 @@ const MOCK_DATA = {
 
   mostPlayedPlaylist: {
     id: "37i9dQZF1DX0XUsuxWHRQd",
-    name: "RapCaviar",
+    name: "Rapea",
     totalMinutes: 3421,
     totalPlays: 156,
     totalTracks: 65,
@@ -117,8 +117,6 @@ topAlbums: [
   
 ]
 };
-
-
 
 /**
  * clase para manejar errores 
@@ -402,20 +400,68 @@ const getMostPlayedAlbum = async (timeRange = 'medium_term') => {
 };
 
 /**
- * Obtiene la playlist mas reproducida
+ * obtiene la playlist mas reproducida
+ * spotify no tiene endpoint para obtener la playlist mas reproducida
  */
 const getMostPlayedPlaylist = async () => {
   try {
     await simulateNetworkDelay();
-    
+   
     if (!hasValidToken()) {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedPlaylist;
     }
 
-    // TODO: todavia no conecto a la api de spotify
-    
-    return MOCK_DATA.mostPlayedPlaylist;
+    // obtener playlists del usuario
+    const playlistsResponse = await spotifyApiRequest('/me/playlists?limit=50');
+   
+    if (!playlistsResponse.items || playlistsResponse.items.length === 0) {
+      console.log('No hay playlists');
+      return MOCK_DATA.mostPlayedPlaylist;
+    }
+
+    // obtener top tracks para comparar
+    const topTracksResponse = await spotifyApiRequest('/me/top/tracks?limit=50&time_range=medium_term');
+   
+    if (!topTracksResponse.items) {
+      return MOCK_DATA.mostPlayedPlaylist;
+    }
+
+    const topTrackIds = new Set(topTracksResponse.items.map(track => track.id));
+    let bestPlaylist = null;
+    let maxMatches = 0;
+
+    // verificar cada playlist para ver cuantas canciones coinciden con el top
+    for (const playlist of playlistsResponse.items.slice(0, 10)) { 
+      try {
+        const tracksResponse = await spotifyApiRequest(`/playlists/${playlist.id}/tracks?limit=50`);
+       
+        if (tracksResponse.items) {
+          const matches = tracksResponse.items.filter(item =>
+            item.track && topTrackIds.has(item.track.id)
+          ).length;
+
+          if (matches > maxMatches) {
+            maxMatches = matches;
+            bestPlaylist = {
+              id: playlist.id,
+              name: playlist.name,
+              totalMinutes: 0, // no esta disponible en la api
+              totalPlays: matches, // canciones que coinciden con el top
+              totalTracks: playlist.tracks.total,
+              description: playlist.description || '',
+              isOwn: playlist.owner.id === (await getCurrentUserId()),
+              owner: playlist.owner.display_name || playlist.owner.id,
+              imageUrl: playlist.images && playlist.images.length > 0 ? playlist.images[0].url : null
+            };
+          }
+        }
+      } catch (error) {
+        console.error(`Error checking playlist ${playlist.id}:`, error);
+        continue;
+      }
+    }
+    return bestPlaylist || MOCK_DATA.mostPlayedPlaylist;
   } catch (error) {
     console.error('Error getting most played playlist:', error);
     return MOCK_DATA.mostPlayedPlaylist;
@@ -423,8 +469,9 @@ const getMostPlayedPlaylist = async () => {
 };
 
 
+
 /**
- * Obtiene la cancion mas reproducida
+ * obtiene la cancion mas reproducida
  */
 const getMostPlayedTrack = async () => {
   try {
