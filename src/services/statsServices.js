@@ -468,6 +468,18 @@ const getMostPlayedPlaylist = async () => {
   }
 };
 
+/**
+ * obtiene el id del usuario actual y se usa para verificar si una playlist es del usuario
+ */
+const getCurrentUserId = async () => {
+  try {
+    const userProfile = await spotifyApiRequest('/me');
+    return userProfile.id;
+  } catch (error) {
+    console.error('Error getting current user ID:', error);
+    return null;
+  }
+};
 
 
 /**
@@ -555,8 +567,6 @@ const getTopTracks = async (timeRange = 'medium_term', limit = 50) => {
     return MOCK_DATA.topTracks.slice(0, validateLimit(limit));
   }
 };
-
-
 
 
 /**
