@@ -26,7 +26,6 @@ const CACHE_CONFIG = {
   }
 };
 
-
 // DATOS MOCK PARA PRUEBA
 
 const MOCK_DATA = {
@@ -243,7 +242,6 @@ const saveAccessToken = (token, expiresIn = 3600) => {
   }
 };
 
-
 /**
  * Hace una peticion a la API de Spotify
  */
@@ -298,7 +296,6 @@ const getMostPlayedArtist = async (timeRange = 'medium_term') => {
       return MOCK_DATA.mostPlayedArtist;
     }
 
-
     // Llamada real a la API
     const response = await spotifyApiRequest(`/me/top/artists?limit=1&time_range=${timeRange}`);
    
@@ -335,7 +332,6 @@ const getMostPlayedAlbum = async (timeRange = 'medium_term') => {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedAlbum;
     }
-
 
     // obtener canciones 
     const response = await spotifyApiRequest(`/me/top/tracks?limit=50&time_range=${timeRange}`);
@@ -481,7 +477,6 @@ const getCurrentUserId = async () => {
   }
 };
 
-
 /**
  * obtiene la cancion mas reproducida
  */
@@ -493,7 +488,6 @@ const getMostPlayedTrack = async (timeRange = 'medium_term') => {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.mostPlayedTrack;
     }
-
 
     // llamada a la API
     const response = await spotifyApiRequest(`/me/top/tracks?limit=1&time_range=${timeRange}`);
@@ -527,7 +521,6 @@ const getMostPlayedTrack = async (timeRange = 'medium_term') => {
     return MOCK_DATA.mostPlayedTrack;
   }
 };
-
 
 /**
  * Obtiene el top de canciones del usuario
@@ -568,7 +561,6 @@ const getTopTracks = async (timeRange = 'medium_term', limit = 50) => {
   }
 };
 
-
 /**
  * Obtiene el top de artistas del usuario
  */
@@ -606,7 +598,6 @@ const getTopArtists = async (timeRange = 'medium_term', limit = 50) => {
   }
 };
 
-
 /**
  * Obtiene el top de albumes del usuario
  */
@@ -621,7 +612,6 @@ const getTopAlbums = async (timeRange = 'medium_term', limit = 50) => {
       console.log('Using mock data - no valid token');
       return MOCK_DATA.topAlbums.slice(0, validLimit);
     }
-
 
     // obtener canciones para contar reproducciones de albumes
     // spotify no tiene un endpoint directo para top albums por lo que usamos top tracks
@@ -680,6 +670,7 @@ const getTopAlbums = async (timeRange = 'medium_term', limit = 50) => {
   }
 };
 
+
 /**
  * Obtiene estadisticas generales de escucha del usuario
  */
@@ -716,7 +707,6 @@ const getListeningStats = async () => {
 
 /**
  * Obtiene estadisticas por período específico
-
  */
 const getStatsByPeriod = async (period = 'month') => {
   try {
@@ -760,6 +750,82 @@ const getStatsByPeriod = async (period = 'month') => {
 };
 
 /**
+ * obtiene las canciones que el usuario agrego a "Me gusta" recientemente
+ */
+const getRecentlyLikedTracks = async (timeRange = 'medium_term') => {
+  try {
+    await simulateNetworkDelay();
+    
+    if (!hasValidToken()) {
+      console.log('Using mock data - no valid token');
+      return {
+        newLikedTracks: 12,
+        tracks: [],
+        period: timeRange
+      };
+    }
+
+    // obtener canciones que el usuario agrego a "me gusta"
+    const response = await spotifyApiRequest('/me/tracks?limit=50');
+    
+    if (!response.items || response.items.length === 0) {
+      return {
+        newLikedTracks: 0,
+        tracks: [],
+        period: timeRange
+      };
+    }
+
+    // calcular fecha limite segun el time_range
+    const now = new Date();
+    let limitDate;
+    
+    switch (timeRange) {
+      case 'short_term':
+        limitDate = new Date(now.getTime() - (4 * 7 * 24 * 60 * 60 * 1000)); // 4 semanas
+        break;
+      case 'medium_term':
+        limitDate = new Date(now.getTime() - (6 * 30 * 24 * 60 * 60 * 1000)); // 6 meses
+        break;
+      case 'long_term':
+        limitDate = new Date(now.getTime() - (12 * 30 * 24 * 60 * 60 * 1000)); // 1 año
+        break;
+      default:
+        limitDate = new Date(now.getTime() - (6 * 30 * 24 * 60 * 60 * 1000));
+    }
+
+    // Filtrar canciones agregadas en el período
+    const recentTracks = response.items.filter(item => {
+      const addedDate = new Date(item.added_at);
+      return addedDate >= limitDate;
+    });
+
+    return {
+      newLikedTracks: recentTracks.length,
+      tracks: recentTracks.map(item => ({
+        id: item.track.id,
+        name: item.track.name,
+        artist: item.track.artists[0]?.name || 'Unknown Artist',
+        album: item.track.album?.name || 'Unknown Album',
+        addedAt: item.added_at,
+        imageUrl: item.track.album?.images?.[0]?.url || null
+      })),
+      period: timeRange,
+      periodDescription: timeRange === 'short_term' ? 'últimas 4 semanas' : 
+                        timeRange === 'medium_term' ? 'últimos 6 meses' : 
+                        'último año'
+    };
+  } catch (error) {
+    console.error('Error getting recently liked tracks:', error);
+    return {
+      newLikedTracks: 0,
+      tracks: [],
+      period: timeRange
+    };
+  }
+};
+
+/**
  * obtiene todos los datos del usuario en un objeto
  */
 const getAllUserStats = async (options = {}) => {
@@ -769,7 +835,6 @@ const getAllUserStats = async (options = {}) => {
     includePeriodStats = true,
     period = 'month'
   } = options;
-
 
   try {
     // Ejecutar todas las consultas en paralelo para mejor rendimiento
@@ -782,6 +847,7 @@ const getAllUserStats = async (options = {}) => {
       topArtists,
       topAlbums,
       generalStats,
+      recentlyLikedTracks,
       periodStats
     ] = await Promise.all([
       getMostPlayedTrack(timeRange),
@@ -792,12 +858,11 @@ const getAllUserStats = async (options = {}) => {
       getTopArtists(timeRange, limit),
       getTopAlbums(timeRange, limit),
       getListeningStats(),
+      getRecentlyLikedTracks(timeRange),
       includePeriodStats ? getStatsByPeriod(period) : Promise.resolve(null)
     ]);
 
-
     console.log("PLAYLISTTTTT",mostPlayedPlaylist);
-
 
     const consolidatedStats = {
       mostPlayed: {
@@ -818,9 +883,9 @@ const getAllUserStats = async (options = {}) => {
         limit,
         generatedAt: new Date().toISOString(),
         hasValidToken: hasValidToken()
-      }
+      },
+      recentlyLikedTracks: recentlyLikedTracks
     };
-
 
     console.log('se cargaron las estadisticas');
     return consolidatedStats;
@@ -829,7 +894,6 @@ const getAllUserStats = async (options = {}) => {
     throw new SpotifyStatsError('Failed to get user stats', 'ALL_STATS_ERROR', error);
   }
 };
-
 
 const testApiConnection = async () => {
   try {
@@ -848,7 +912,6 @@ const testApiConnection = async () => {
   }
 };
 
-
 export {
   // Funciones principales
   getMostPlayedArtist,
@@ -861,6 +924,7 @@ export {
   getListeningStats,
   getStatsByPeriod,
   getAllUserStats,
+  getRecentlyLikedTracks,
   
   formatMinutesToReadable,
   validateTimeRange,
