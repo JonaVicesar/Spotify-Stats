@@ -86,7 +86,7 @@ const StatsCard = ({
           <div className="details-section mb-3">
             {details.map((detail, index) => (
               <div key={index} className="d-flex justify-content-between align-items-center py-2">
-                <small className="text-muted">{detail.label}:</small>
+                <small className="text-white">{detail.label}:</small>
                 <small className="fw-medium text-truncate ms-2 text-white-50" title={detail.value}>
                   {detail.value}
                 </small>
