@@ -1,5 +1,4 @@
 import React from 'react';
-import StatsCard from './StatsCard';
 
 const MostPlayedStats = ({ mostPlayed }) => {
   // si no hay datos se muestra el mensaje 
@@ -120,8 +119,6 @@ const MostPlayedStats = ({ mostPlayed }) => {
     return actions;
   };
 
-
-
   return (
 <div className="row g-4 mb-5">
         {statsData.map((stat, index) => (
@@ -152,54 +149,12 @@ const MostPlayedStats = ({ mostPlayed }) => {
                       
                       {/* Subtitulo especifico por tipo */}
                         <p className="text-white-50 mb-3 small text-truncate">
-                          {stat.type === 'track' ? stat.data.artists?.map(a => a.name).join(', ') :                       
-                          stat.type === 'album' ? stat.data.artists?.map(a => a.name).join(', ') :
-                          stat.type === 'playlist' ? `Por ${stat.data.owner?.display_name}` : 
+                          {console.log("QUE PRO SOY", stat.data)}
+                          {stat.type === 'track' ? `Artist: ${stat.data?.artist}`  :                       
+                          stat.type === 'album' ? `Artist: ${stat.data?.artist}` :
+                          stat.type === 'playlist' ? `Canciones: ${stat.data?.totalTracks}` : 
                           stat.type === 'artist' ? `${stat.data.followers?.total?.toLocaleString()} seguidores` : ''}  
                         </p>
-                              {/*{console.log("##########", stat.data?.artist)}*/}
-                              
-                      {/* Estadistica principal*/}
-                      <div className="mb-3">
-                        {stat.type === 'track' && (
-                          <div className="d-flex align-items-center gap-2">
-                            <i className="fas fa-play-circle text-primary"></i>
-                            <span className="text-white fw-semibold">
-                              {stat.data?.totalMinutes} reproducciones  { /*por ahora solo muestro como reproducciones los ms*/}
-                              {console.log('TOTAL MS', stat.data.totalMinutes)}
-
-                            </span>
-                          </div>
-                        )}
-                        {stat.type === 'artist' && (
-                          <div className="d-flex align-items-center gap-2">
-                            <i className="fas fa-clock text-success"></i>
-                            <span className="text-white fw-semibold">
-                              {stat.data.total_play_time || '0'}h escuchadas 
-                              {console.log('ARTISTAAAAAAA', stat.data)}
-
-                            </span>
-                          </div>
-                        )}
-                        {stat.type === 'album' && (
-                          <div className="d-flex align-items-center gap-2">
-                            <i className="fas fa-calendar text-warning"></i>
-                            <span className="text-white fw-semibold">
-                              {stat.data?.releaseDate || 'N/A'}
-                              {console.log('AÑO DE LANZAMIENTO', stat.data)}
-
-                            </span>
-                          </div>
-                        )}
-                        {stat.type === 'playlist' && (
-                          <div className="d-flex align-items-center gap-2">
-                            <i className="fas fa-list text-info"></i>
-                            <span className="text-white fw-semibold">
-                              {stat.data?.totalTracks || 0} canciones {console.log('PLAYLISTTTTTTTTTTTTTTTT ', stat.data.totalTracks)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
 
                       {/* Botones de accion*/}
                       <div className="d-flex gap-2 flex-wrap">
