@@ -752,7 +752,7 @@ const getStatsByPeriod = async (period = 'month') => {
 /**
  * obtiene las canciones que el usuario agrego a "Me gusta" recientemente
  */
-const getRecentlyLikedTracks = async (timeRange = 'medium_term') => {
+const getRecentlyLikedTracks = async () => {
   try {
     await simulateNetworkDelay();
     
@@ -775,31 +775,17 @@ const getRecentlyLikedTracks = async (timeRange = 'medium_term') => {
         period: timeRange
       };
     }
-
-    // calcular fecha limite segun el time_range
+  
     const now = new Date();
-    let limitDate;
+    let limitDate = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
     
-    switch (timeRange) {
-      case 'short_term':
-        limitDate = new Date(now.getTime() - (4 * 7 * 24 * 60 * 60 * 1000)); // 4 semanas
-        break;
-      case 'medium_term':
-        limitDate = new Date(now.getTime() - (6 * 30 * 24 * 60 * 60 * 1000)); // 6 meses
-        break;
-      case 'long_term':
-        limitDate = new Date(now.getTime() - (12 * 30 * 24 * 60 * 60 * 1000)); // 1 año
-        break;
-      default:
-        limitDate = new Date(now.getTime() - (6 * 30 * 24 * 60 * 60 * 1000));
-    }
-
-    // Filtrar canciones agregadas en el período
+    // ahora filtramos las canciones guardada solo en la semana
     const recentTracks = response.items.filter(item => {
       const addedDate = new Date(item.added_at);
       return addedDate >= limitDate;
     });
 
+    console.log("JONA ACA", limitDate)
     return {
       newLikedTracks: recentTracks.length,
       tracks: recentTracks.map(item => ({
@@ -810,10 +796,7 @@ const getRecentlyLikedTracks = async (timeRange = 'medium_term') => {
         addedAt: item.added_at,
         imageUrl: item.track.album?.images?.[0]?.url || null
       })),
-      period: timeRange,
-      periodDescription: timeRange === 'short_term' ? 'últimas 4 semanas' : 
-                        timeRange === 'medium_term' ? 'últimos 6 meses' : 
-                        'último año'
+      period: ''
     };
   } catch (error) {
     console.error('Error getting recently liked tracks:', error);
@@ -858,7 +841,7 @@ const getAllUserStats = async (options = {}) => {
       getTopArtists(timeRange, limit),
       getTopAlbums(timeRange, limit),
       getListeningStats(),
-      getRecentlyLikedTracks(timeRange),
+      getRecentlyLikedTracks(),
       includePeriodStats ? getStatsByPeriod(period) : Promise.resolve(null)
     ]);
 
