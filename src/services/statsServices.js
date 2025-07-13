@@ -29,7 +29,7 @@ const CACHE_CONFIG = {
 // DATOS MOCK PARA PRUEBA
 
 const MOCK_DATA = {
-  mostPlayedTrack: {
+  mostPlayedTrack: {  
     id: "4uLU6hMCjMI75M1A2tKUQC",
     name: "Never Gonna Give You Up",
     artist: "Rick Astley",
@@ -313,7 +313,8 @@ const getMostPlayedArtist = async (timeRange = 'medium_term') => {
       totalPlays: 0,   // tampoco esta disponible
       genres: artist.genres || [],
       imageUrl: artist.images && artist.images.length > 0 ? artist.images[0].url : null,
-      popularity: artist.popularity
+      popularity: artist.popularity,
+      followers: artist.followers
     };
   } catch (error) {
     console.error('Error getting most played artist:', error);
@@ -772,10 +773,9 @@ const getRecentlyLikedTracks = async () => {
       return {
         newLikedTracks: 0,
         tracks: [],
-        period: timeRange
       };
     }
-  
+
     const now = new Date();
     let limitDate = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
     
@@ -792,7 +792,7 @@ const getRecentlyLikedTracks = async () => {
         id: item.track.id,
         name: item.track.name,
         artist: item.track.artists[0]?.name || 'Unknown Artist',
-        album: item.track.album?.name || 'Unknown Album',
+        album: item.track.album || 'Unknown Album',
         addedAt: item.added_at,
         imageUrl: item.track.album?.images?.[0]?.url || null
       })),
@@ -803,7 +803,6 @@ const getRecentlyLikedTracks = async () => {
     return {
       newLikedTracks: 0,
       tracks: [],
-      period: timeRange
     };
   }
 };
