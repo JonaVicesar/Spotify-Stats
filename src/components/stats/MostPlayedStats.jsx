@@ -1,4 +1,6 @@
 import React from 'react';
+import { playTrack, viewAlbum, viewArtist, followArtist } from '../../services/spotifyActions';
+
 
 const MostPlayedStats = ({ mostPlayed }) => {
   // si no hay datos se muestra el mensaje 
@@ -90,19 +92,19 @@ const MostPlayedStats = ({ mostPlayed }) => {
     switch (type) {
       case 'track':
         actions.push(
-          { icon: 'fas fa-play', text: 'Reproducir', variant: 'primary', onClick: () => console.log('Play track:', item.id) },
+          { icon: 'fas fa-play', text: 'Reproducir', variant: 'primary', onClick: () => {playTrack(item.id)}},
           { icon: 'fas fa-plus', text: 'Agregar', variant: 'outline-success', onClick: () => console.log('Add track:', item.id) }
         );
         break;
       case 'artist':
         actions.push(
-          { icon: 'fas fa-eye', text: 'Ver Perfil', variant: 'success', onClick: () => console.log('View artist:', item.id) },
-          { icon: 'fas fa-user-plus', text: 'Seguir', variant: 'outline-success', onClick: () => console.log('Follow artist:', item.id) }
+          { icon: 'fas fa-eye', text: 'Ver Perfil', variant: 'success', onClick: () => {viewArtist(item.id)} },
+          { icon: 'fas fa-user-plus', text: 'Seguir', variant: 'outline-success', onClick: () => {followArtist(item.id)}}
         );
         break;
       case 'album':
         actions.push(
-          { icon: 'fas fa-eye', text: 'Ver Álbum', variant: 'warning', onClick: () => console.log('View album:', item.id) },
+          { icon: 'fas fa-eye', text: 'Ver Álbum', variant: 'warning', onClick: () => {viewAlbum(item.id)} },
           { icon: 'fas fa-heart', text: 'Guardar', variant: 'outline-danger', onClick: () => console.log('Save album:', item.id) }
         );
         break;
@@ -182,7 +184,6 @@ const MostPlayedStats = ({ mostPlayed }) => {
           </div>
         ))}
       </div>
-
   );
 };
 
