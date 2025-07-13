@@ -1,8 +1,8 @@
 /**
  * funcion para hacer las peticiones a la api(helper)
  */
-const spotifyApiRequest = async (token, options = {}) => {
-  const token = localStorage.getItem("spotify_api_request");
+const spotifyApiRequest = async (endpoint, options = {}) => {
+  const token = localStorage.getItem('spotify_access_token');
 
   if (!token) {
     throw new Error("No hay token de acceso");
@@ -25,7 +25,7 @@ const spotifyApiRequest = async (token, options = {}) => {
   return response.json();
 };
 
-const {userId} = await spotifyApiRequest('/me');
+/*const userId = await spotifyApiRequest('/me');*/
 
 /**
  * REPRODCIR CANCION
