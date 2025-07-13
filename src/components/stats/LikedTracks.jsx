@@ -1,4 +1,5 @@
 import React from "react";
+import {playTrack, viewAlbum} from "..//../services/spotifyActions.js"
 
 const LikedTracks = ({ likedTracks }) => {
   if (!likedTracks || !likedTracks.tracks || likedTracks.tracks.length === 0) {
@@ -12,7 +13,7 @@ const LikedTracks = ({ likedTracks }) => {
     );
   }
 
-  console.log("AKAKAKAKA", likedTracks.newLikedTracks);
+  console.log("AKAKAKAKA", likedTracks.tracks[0].album);
 
   const lastLikedTrack = likedTracks.tracks[0]; //ultima cancion agregada
   const newLikedTracks = likedTracks.newLikedTracks;
@@ -52,14 +53,13 @@ const LikedTracks = ({ likedTracks }) => {
 
                 {/* Subtitulo con artista */}
                 <p className="text-white-50 mb-3 small text-truncate">
-                  Por {lastLikedTrack.artist}
+                  Artist: {lastLikedTrack.artist}
                 </p>
 
                 {/* Informacion adicional */}
                 <div className="mb-3">
                   <div className="d-flex align-items-center gap-2 mb-2">
-                    <i className="fas fa-compact-disc text-danger"></i>
-                    <span className="text-white fw-semibold">
+                    <p className="text-white-50 mb-3 small text-truncate">
                       {new Date(lastLikedTrack.addedAt).toDateString() ===
                       now.toDateString()
                         ? "Agregada hoy"
@@ -70,7 +70,7 @@ const LikedTracks = ({ likedTracks }) => {
                             month: "numeric",
                             day: "numeric",
                           })}`}
-                    </span>
+                    </p>
                   </div>
                 </div>
 
@@ -79,8 +79,7 @@ const LikedTracks = ({ likedTracks }) => {
                   <button
                     className="btn btn-danger btn-sm px-3"
                     onClick={() =>
-                      console.log("Play track:", lastLikedTrack.id)
-                    }
+                    {playTrack(lastLikedTrack.id)}}
                   >
                     <i className="fas fa-play me-1"></i>
                     Reproducir
@@ -97,7 +96,7 @@ const LikedTracks = ({ likedTracks }) => {
                   <button
                     className="btn btn-outline-info btn-sm px-3"
                     onClick={() =>
-                      console.log("View album:", lastLikedTrack.id)
+                      {viewAlbum(likedTracks.tracks[0].album.id)}
                     }
                   >
                     <i className="fas fa-external-link-alt me-1"></i>
