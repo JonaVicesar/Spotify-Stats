@@ -44,8 +44,8 @@ const StatsCard = ({
   // si no se reciben props para valor, icono y color se muestra la tarjeta de estadisticas normal
   return (
     <div className={`card h-100 stats-card ${className}`}>
-      <div className="card-body p-4">
-        <div className="d-flex align-items-start mb-3">
+      <div className="card-body p-0">
+        <div className="d-flex align-items-start mb-4">
           {showRank && (
             <div className="rank-badge me-3">
               <span className="badge bg-primary fs-6">{rank}</span>
