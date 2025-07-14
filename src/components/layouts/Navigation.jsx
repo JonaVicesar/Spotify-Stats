@@ -74,7 +74,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
 
           {/* link al repositorio */}
           <span className="navbar-text me-3">
-            <a className="github-link" href="https://github.com/JonaVicesar/Spotify-Stats.git">
+            <a className="github-link" href="https://github.com/JonaVicesar/Spotify-Stats.git" target="_blank"> 
               <FontAwesomeIcon 
               icon={faGithub}
               className="fs-1 text-white" 
