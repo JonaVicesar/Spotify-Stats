@@ -35,7 +35,7 @@ const Navigation = ({ activeSection, setActiveSection, user, onLogout }) => {
             handleSectionChange("dashboard");
           }}
         >
-          🧬 <span className="text-success">SpotiStats</span>
+          <img src="public/logo.png" width={40}></img> <span className="text-success">SpotiStats</span>
         </a>
 
         <button
