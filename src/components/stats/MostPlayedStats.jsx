@@ -1,5 +1,5 @@
 import React from 'react';
-import { playTrack, viewAlbum, viewArtist, followArtist } from '../../services/spotifyActions';
+import { playTrack, viewAlbum, viewArtist, followArtist, saveAlbum, playPlaylist } from '../../services/spotifyActions';
 
 
 const MostPlayedStats = ({ mostPlayed }) => {
@@ -105,12 +105,12 @@ const MostPlayedStats = ({ mostPlayed }) => {
       case 'album':
         actions.push(
           { icon: 'fas fa-eye', text: 'Ver Álbum', variant: 'warning', onClick: () => {viewAlbum(item.id)} },
-          { icon: 'fas fa-heart', text: 'Guardar', variant: 'outline-danger', onClick: () => console.log('Save album:', item.id) }
+          { icon: 'fas fa-heart', text: 'Guardar', variant: 'outline-danger', onClick: () => {saveAlbum(item.id)} }
         );
         break;
       case 'playlist':
         actions.push(
-          { icon: 'fas fa-play', text: 'Reproducir', variant: 'info', onClick: () => console.log('Play playlist:', item.id) },
+          { icon: 'fas fa-play', text: 'Reproducir', variant: 'info', onClick: () => {playPlaylist(item.id)} },
           { icon: 'fas fa-external-link-alt', text: 'Abrir', variant: 'outline-info', onClick: () => console.log('Open playlist:', item.id) }
         );
         break;
@@ -151,7 +151,7 @@ const MostPlayedStats = ({ mostPlayed }) => {
                       
                       {/* Subtitulo especifico por tipo */}
                         <p className="text-white-50 mb-3 small text-truncate">
-                          {console.log("QUE PRO SOY", stat.data)}
+                          {console.log("OP###############", stat.data)}
                           {stat.type === 'track' ? `Artist: ${stat.data?.artist}`  :                       
                           stat.type === 'album' ? `Artist: ${stat.data?.artist}` :
                           stat.type === 'playlist' ? `Canciones: ${stat.data?.totalTracks}` : 
