@@ -6,7 +6,11 @@ const SpotifyLogin = ({ onConnect, loading, error }) => {
       <div className="auth-card auth-slide-in">
         {/* Logo */}
         <div className="auth-logo">
-          🧬
+          <img
+          src="logo.png"
+          alt="SpotiStats-Logo"
+          width={110}
+          ></img>
         </div>
         
         {/* Titulo y subtitulo */}
