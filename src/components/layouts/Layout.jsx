@@ -28,19 +28,8 @@ const Layout = ({
       onTimeRangeChange,
     };
 
-    switch (activeSection) {
-      case "dashboard":
-        return <DashboardSection {...sectionProps} />;
-        /*
-      case "analysis":
-        return <AnalysisSection {...sectionProps} />;
-      case "social":
-        return <SocialSection {...sectionProps} />;
-      case "predictions":
-        return <PredictionsSection {...sectionProps} />;*/
-      default:
-        return <DashboardSection {...sectionProps} />;
-    }
+    if (activeSection === "dashboard") return <DashboardSection {...sectionProps} />;
+    
   };
 
   return (
