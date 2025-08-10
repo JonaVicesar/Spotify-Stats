@@ -13,7 +13,7 @@ const TopTracksComponent = ({ tracks = [] }) => {
         <div className="row">
           {tracks.map((track, index) => (
             <div key={track.id} className="col-md-6 col-lg-4 mb-3">
-              <StatsCard
+              <StatsCard 
                 rank={index + 1}
                 title={track.name}
                 subtitle={track.artists.map(artist => artist.name).join(', ')}
@@ -21,11 +21,12 @@ const TopTracksComponent = ({ tracks = [] }) => {
                 details={[
                   { label: 'Álbum', value: track.album.name },
                   { label: 'Duración', value: `${Math.floor(track.duration_ms / 60000)}:${String(Math.floor((track.duration_ms % 60000) / 1000)).padStart(2, '0')}` },
-                  { label: 'Popularidad', value: `${track.popularity}%` }
-                ]}
+                  { label: 'Reproducciones', value: track.play_count?.toLocaleString() || 'N/A' }
+                ]} 
               />
             </div>
           ))}
+          
         </div>
       ) : (
         <div className="text-center py-5">
