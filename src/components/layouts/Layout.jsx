@@ -31,12 +31,13 @@ const Layout = ({
     switch (activeSection) {
       case "dashboard":
         return <DashboardSection {...sectionProps} />;
+        /*
       case "analysis":
         return <AnalysisSection {...sectionProps} />;
       case "social":
         return <SocialSection {...sectionProps} />;
       case "predictions":
-        return <PredictionsSection {...sectionProps} />;
+        return <PredictionsSection {...sectionProps} />;*/
       default:
         return <DashboardSection {...sectionProps} />;
     }
@@ -64,9 +65,6 @@ const Layout = ({
               >
                 <div className="text-center">
                   <LoadingSpinner size="lg" />
-                  <p className="text-muted mt-3">
-                    Analizando tu ADN musical...
-                  </p>
                 </div>
               </div>
             ) : statsError ? (
