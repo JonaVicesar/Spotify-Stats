@@ -3,7 +3,6 @@ import MostPlayedStats from "../stats/MostPlayedStats";
 import TopTracksComponent from "../stats/TopTracksComponent";
 import TopArtistComponent from "../stats/TopArtistComponent";
 import TopAlbumsComponent from "../stats/TopAlbumsComponent";
-import ListeningStats from "../stats/ListeningStats";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorAlert from "../common/ErrorAlert";
 import LikedTracks from "../stats/LikedTracks";
