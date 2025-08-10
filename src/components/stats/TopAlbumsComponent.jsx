@@ -24,7 +24,7 @@ const TopAlbumsComponent = ({ albums = [] }) => {
                 details={[
                   { label: 'Año', value: album.release_date ? new Date(album.release_date).getFullYear() : 'N/A' },
                   { label: 'Canciones', value: `${album.total_tracks} tracks` },
-                  { label: 'Popularidad', value: `${album.popularity}%` }
+
                 ]}
                 className="h-100"
                 // onClick={() => console.log(`Ver detalles del álbum: ${album.name}`)}
