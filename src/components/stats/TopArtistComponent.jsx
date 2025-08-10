@@ -1,4 +1,3 @@
-// src/components/stats/TopArtistComponent.jsx
 import React from 'react';
 import StatsCard from './StatsCard';
 
@@ -21,11 +20,9 @@ const TopArtistComponent = ({ artists = [] }) => {
                 image={artist.images?.[0]?.url}
                 details={[
                   { label: 'Géneros', value: artist.genres?.slice(0, 3).join(', ') || 'N/A' },
-                  { label: 'Popularidad', value: `${artist.popularity}%` },
                   { label: 'Seguidores', value: artist.followers?.total.toLocaleString() || 'N/A' }
+                  
                 ]}
-                // Las acciones se mantendrían si las necesitas
-                // actions={[...]}
               />
             </div>
           ))}
