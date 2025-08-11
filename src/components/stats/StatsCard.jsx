@@ -18,7 +18,7 @@ const StatsCard = ({
     return (
       <div className={`card h-100 stats-card ${className}`}>
         <div className="card-body p-4">
-          <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="d-flex align-items-start justify-content-between mb-3">
             <div className="text-start">
               <h6 className="card-title mb-2 text-white-50 text-uppercase" style={{ fontSize: '0.875rem', fontWeight: '600' }}>
                 {title}
@@ -75,9 +75,11 @@ const StatsCard = ({
               {title}
             </h6>
             {subtitle && (
-              <p className="card-text text-muted small mb-0 text-truncate" title={subtitle}>
+              <div className= "d-flex justify-content-start">
+              <p className="card-text text-white small mb-1 text-truncate" title={subtitle}>
                 {subtitle}
               </p>
+              </div>
             )}
           </div>
         </div>
